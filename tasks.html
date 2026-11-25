@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#fff">
+<title>Planora — Tugas</title><link rel="stylesheet" href="style.css">
+</head>
+<body><div class="app-shell">
+<aside class="sidebar">
+<a class="brand" href="index.html"><span class="brand-mark">P</span><span>Planora</span></a><div class="nav-label">MENU</div>
+<nav class="main-nav" aria-label="Navigasi">
+<a class="nav-item" href="index.html"><span class="nav-icon">▦</span>Dashboard</a>
+<a class="nav-item active" href="tasks.html"><span class="nav-icon">☑</span>Tugas</a>
+<a class="nav-item" href="#calendar" data-feature="Kalender"><span class="nav-icon">▦</span>Kalender</a>
+<a class="nav-item" href="#reminders" data-feature="Pengingat"><span class="nav-icon">◷</span>Pengingat</a>
+<a class="nav-item" href="#notes" data-feature="Catatan"><span class="nav-icon">☷</span>Catatan</a>
+<a class="nav-item mobile-settings" href="#settings" data-feature="Pengaturan"><span class="nav-icon">⚙</span>Pengaturan</a>
+</nav><div class="sidebar-bottom"><a class="nav-item" href="#settings" data-feature="Pengaturan"><span class="nav-icon">⚙</span>Pengaturan</a><div class="sidebar-note">Plan your day.<br>Remember your goals.</div></div>
+</aside>
+<main class="main-content task-page">
+<header class="topbar"><div class="mobile-brand"><span class="brand-mark">P</span><strong>Planora</strong></div><div class="breadcrumbs">Workspace <span>/</span> Tugas</div><button class="profile" aria-label="Profil pengguna">P</button></header>
+<section class="page-heading"><div><p class="eyebrow" id="task-page-date">DAFTAR RENCANA</p><h1>Tugas</h1><p class="subheading">Kelola semua rencana, prioritas, dan progresmu.</p></div><button class="primary-button" id="task-add"><span>＋</span> Tambah Tugas</button></section>
+<section class="task-stats" aria-label="Ringkasan tugas"><div class="task-stat"><span>Semua</span><strong id="stat-all">0</strong></div><div class="task-stat"><span>Belum selesai</span><strong id="stat-open">0</strong></div><div class="task-stat"><span>Selesai</span><strong id="stat-done">0</strong></div></section>
+<section class="panel task-manager">
+<div class="task-toolbar"><label class="task-search"><span>⌕</span><input id="task-search" type="search" placeholder="Cari nama tugas..." aria-label="Cari tugas"></label><select id="task-filter" aria-label="Filter status"><option value="all">Semua status</option><option value="open">Belum selesai</option><option value="done">Selesai</option><option value="overdue">Terlewat</option></select><select id="task-sort" aria-label="Urutkan tugas"><option value="date">Tanggal terdekat</option><option value="priority">Prioritas</option><option value="created">Terbaru ditambahkan</option></select></div>
+<div class="task-table-head"><span>TUGAS</span><span>TANGGAL</span><span>PRIORITAS</span><span>AKSI</span></div>
+<div id="task-manager-list" class="task-manager-list" aria-live="polite"></div>
+</section><footer class="footer">Planora <span>•</span> Rencana lebih teratur, hari lebih tenang.</footer>
+</main></div>
+<dialog id="manager-dialog" class="task-dialog"><form id="manager-form"><div class="dialog-heading"><div><h2 id="manager-dialog-title">Tambah Tugas</h2><p>Isi detail rencana yang ingin kamu lakukan.</p></div><button type="button" class="close-dialog" id="manager-close" aria-label="Tutup">×</button></div>
+<label>Nama tugas<input name="title" required maxlength="100" placeholder="Contoh: Menyelesaikan laporan"></label>
+<div class="form-row"><label>Tanggal<input name="date" type="date" required></label><label>Waktu<input name="time" type="time"></label></div>
+<div class="form-row"><label>Kategori<select name="category"><option>Pekerjaan</option><option>Pribadi</option><option>Belajar</option><option>Lainnya</option></select></label><label>Prioritas<select name="priority"><option value="low">Rendah</option><option value="medium" selected>Sedang</option><option value="high">Tinggi</option></select></label></div>
+<div class="dialog-actions"><button type="button" class="secondary-button" id="manager-cancel">Batal</button><button type="submit" class="primary-button" id="manager-save">Simpan Tugas</button></div></form></dialog>
+<script src="tasks.js"></script></body></html>
