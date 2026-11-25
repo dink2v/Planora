@@ -141,42 +141,6 @@
     todayTasks.forEach((task) => taskList.append(createTaskRow(task)));
   }
 
-  function renderCalendar() {
-    const year = shownMonth.getFullYear();
-    const month = shownMonth.getMonth();
-    $("#month-label").textContent = shownMonth.toLocaleDateString("id-ID", { month: "long", year: "numeric" });
-    const grid = $("#calendar-grid");
-    grid.replaceChildren();
-
-    ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"].forEach((day) => {
-      const el = document.createElement("span");
-      el.className = "weekday";
-      el.textContent = day;
-      grid.append(el);
-    });
-
-    const firstDay = new Date(year, month, 1).getDay();
-    const days = new Date(year, month + 1, 0).getDate();
-    for (let i = 0; i < firstDay; i++) {
-      const blank = document.createElement("span");
-      blank.setAttribute("aria-hidden", "true");
-      grid.append(blank);
-    }
-
-    for (let day = 1; day <= days; day++) {
-      const date = new Date(year, month, day);
-      const key = dateKey(date);
-      const el = document.createElement("span");
-      el.textContent = String(day);
-      if (key === todayKey()) el.classList.add("today");
-      if (tasks.some((task) => task.date === key)) {
-        el.classList.add("has-plan");
-        el.setAttribute("aria-label", day + " ada rencana");
-      }
-      grid.append(el);
-    }
-  }
-
   function renderUpcoming() {
     if (!upcomingContainer) return;
     upcomingContainer.replaceChildren();
@@ -224,7 +188,6 @@
 
   function renderAll() {
     renderTasks();
-    renderCalendar();
     renderUpcoming();
   }
 
@@ -240,15 +203,6 @@
   $("#add-inline")?.addEventListener("click", openDialog);
   $("#close-dialog")?.addEventListener("click", () => dialog.close());
   $("#cancel-dialog")?.addEventListener("click", () => dialog.close());
-  $("#prev-month")?.addEventListener("click", () => {
-    shownMonth = new Date(shownMonth.getFullYear(), shownMonth.getMonth() - 1, 1);
-    renderCalendar();
-  });
-  $("#next-month")?.addEventListener("click", () => {
-    shownMonth = new Date(shownMonth.getFullYear(), shownMonth.getMonth() + 1, 1);
-    renderCalendar();
-  });
-
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     const data = new FormData(form);
@@ -277,23 +231,16 @@
     weekday: "long", day: "numeric", month: "long", year: "numeric"
   }).toUpperCase();
 
-  // Fitur yang belum dibuat diberi keterangan, bukan link kosong.
-  document.querySelectorAll('a[href="#settings"]').forEach((link) => {
+  // Menu fitur lain disiapkan sebagai navigasi mandiri; halaman fiturnya dibuat bertahap.
+  document.querySelectorAll("[data-feature]").forEach((link) => {
     link.addEventListener("click", (event) => {
       event.preventDefault();
-      showNotice("Halaman Pengaturan belum dibuat. Saat ini fokusnya dashboard dan rencana.");
+      const feature = link.dataset.feature || "Fitur";
+      showNotice("Halaman " + feature + " akan dibuat sebagai fitur tersendiri. Dashboard saat ini tetap menampilkan ringkasan.");
     });
   });
   $(".profile")?.addEventListener("click", () => {
     showNotice("Profil pengguna akan ditambahkan setelah fitur akun dibuat.");
-  });
-
-  // Highlight menu sesuai bagian yang sedang dibuka.
-  document.querySelectorAll(".nav-item").forEach((link) => {
-    link.addEventListener("click", () => {
-      document.querySelectorAll(".nav-item").forEach((item) => item.classList.remove("active"));
-      link.classList.add("active");
-    });
   });
 
   renderAll();
