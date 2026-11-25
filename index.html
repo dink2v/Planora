@@ -5,16 +5,26 @@
 <title>Planora — Dashboard</title><link rel="stylesheet" href="style.css">
 </head>
 <body><div class="app-shell">
-<aside class="sidebar"><a class="brand" href="#"><span class="brand-mark">P</span><span>Planora</span></a><div class="nav-label">MENU</div>
-<nav class="main-nav" aria-label="Navigasi"><a class="nav-item active" href="#dashboard"><span class="nav-icon">▦</span>Dashboard</a><a class="nav-item" href="#today"><span class="nav-icon">☑</span>Hari Ini</a><a class="nav-item" href="#calendar"><span class="nav-icon">▦</span>Kalender</a><a class="nav-item" href="#plans"><span class="nav-icon">☷</span>Semua Rencana</a></nav>
-<div class="sidebar-bottom"><a class="nav-item" href="#settings"><span class="nav-icon">⚙</span>Pengaturan</a><div class="sidebar-note">Plan your day.<br>Remember your goals.</div></div></aside>
+<aside class="sidebar">
+<a class="brand" href="index.html"><span class="brand-mark">P</span><span>Planora</span></a>
+<div class="nav-label">MENU</div>
+<nav class="main-nav" aria-label="Navigasi">
+<a class="nav-item active" href="index.html"><span class="nav-icon">▦</span>Dashboard</a>
+<a class="nav-item" href="#tasks" data-feature="Tugas"><span class="nav-icon">☑</span>Tugas</a>
+<a class="nav-item" href="#calendar" data-feature="Kalender"><span class="nav-icon">▦</span>Kalender</a>
+<a class="nav-item" href="#reminders" data-feature="Pengingat"><span class="nav-icon">◷</span>Pengingat</a>
+<a class="nav-item" href="#notes" data-feature="Catatan"><span class="nav-icon">☷</span>Catatan</a>
+</nav>
+<div class="sidebar-bottom"><a class="nav-item" href="#settings" data-feature="Pengaturan"><span class="nav-icon">⚙</span>Pengaturan</a><div class="sidebar-note">Plan your day.<br>Remember your goals.</div></div>
+</aside>
 <main class="main-content" id="dashboard">
 <header class="topbar"><div class="mobile-brand"><span class="brand-mark">P</span><strong>Planora</strong></div><div class="breadcrumbs">Workspace <span>/</span> Dashboard</div><button class="profile" aria-label="Profil pengguna">P</button></header>
-<section class="page-heading"><div><p class="eyebrow" id="today-date">RINGKASAN HARI INI</p><h1>Dashboard</h1><p class="subheading">Atur rencana dan fokus pada hal penting.</p></div><button class="primary-button" id="open-task-form"><span>＋</span> Tambah Rencana</button></section>
-<section class="summary-grid" aria-label="Ringkasan"><article class="summary-card"><div class="summary-top"><span>Rencana Hari Ini</span><span class="summary-icon blue">☷</span></div><strong id="today-count">0</strong><small>Yang perlu kamu lakukan</small></article><article class="summary-card"><div class="summary-top"><span>Selesai</span><span class="summary-icon green">✓</span></div><strong id="done-count">0</strong><small>Rencana diselesaikan</small></article><article class="summary-card"><div class="summary-top"><span>Terlewat</span><span class="summary-icon orange">!</span></div><strong id="overdue-count">0</strong><small>Perlu dijadwalkan ulang</small></article></section>
-<section class="content-grid"><div class="panel tasks-panel" id="today"><div class="panel-heading"><div><h2>Rencana Hari Ini</h2><p>Daftar kegiatan yang sudah dijadwalkan</p></div><a href="#plans" class="text-link">Lihat semua</a></div><div class="task-list" id="task-list"></div><button class="add-inline" id="add-inline">＋ Tambah rencana baru</button></div>
-<aside class="panel calendar-panel" id="calendar"><div class="panel-heading"><div><h2>Kalender</h2><p id="month-label">Bulan ini</p></div><div class="calendar-controls"><button id="prev-month" aria-label="Bulan sebelumnya">‹</button><button id="next-month" aria-label="Bulan berikutnya">›</button></div></div><div class="calendar-grid" id="calendar-grid"></div><div class="calendar-legend"><span><i class="dot blue-dot"></i> Ada rencana</span></div></aside></section>
-<section class="panel upcoming-panel" id="plans"><div class="panel-heading"><div><h2>Rencana Mendatang</h2><p>Yang akan segera kamu kerjakan</p></div><a href="#plans" class="text-link">Lihat semua</a></div><div class="upcoming-list" aria-live="polite"></div></section>
+<section class="page-heading"><div><p class="eyebrow" id="today-date">RINGKASAN HARI INI</p><h1>Dashboard</h1><p class="subheading">Ringkasan rencana dan kegiatanmu.</p></div><button class="primary-button" id="open-task-form"><span>＋</span> Tambah Rencana</button></section>
+<section class="summary-grid" aria-label="Ringkasan"><article class="summary-card"><div class="summary-top"><span>Hari Ini</span><span class="summary-icon blue">☷</span></div><strong id="today-count">0</strong><small>Rencana hari ini</small></article><article class="summary-card"><div class="summary-top"><span>Selesai</span><span class="summary-icon green">✓</span></div><strong id="done-count">0</strong><small>Sudah diselesaikan</small></article><article class="summary-card"><div class="summary-top"><span>Terlewat</span><span class="summary-icon orange">!</span></div><strong id="overdue-count">0</strong><small>Belum diselesaikan</small></article></section>
+<section class="content-grid dashboard-content">
+<div class="panel tasks-panel" id="tasks"><div class="panel-heading"><div><h2>Tugas Hari Ini</h2><p>Yang perlu kamu selesaikan hari ini</p></div><a href="#tasks" class="text-link" data-feature="Semua Tugas">Lihat semua</a></div><div class="task-list" id="task-list"></div><button class="add-inline" id="add-inline">＋ Tambah rencana baru</button></div>
+<div class="panel upcoming-panel" id="upcoming"><div class="panel-heading"><div><h2>Mendatang</h2><p>Rencana berikutnya</p></div></div><div class="upcoming-list" aria-live="polite"></div></div>
+</section>
 <footer class="footer">Planora <span>•</span> Rencana lebih teratur, hari lebih tenang.</footer>
 </main></div>
 <dialog id="task-dialog" class="task-dialog"><form id="task-form"><div class="dialog-heading"><div><h2>Tambah Rencana</h2><p>Catat kegiatan yang ingin kamu lakukan.</p></div><button type="button" class="close-dialog" id="close-dialog" aria-label="Tutup">×</button></div>
