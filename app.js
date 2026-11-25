@@ -277,6 +277,17 @@
     weekday: "long", day: "numeric", month: "long", year: "numeric"
   }).toUpperCase();
 
+  // Fitur yang belum dibuat diberi keterangan, bukan link kosong.
+  document.querySelectorAll('a[href="#settings"]').forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      showNotice("Halaman Pengaturan belum dibuat. Saat ini fokusnya dashboard dan rencana.");
+    });
+  });
+  $(".profile")?.addEventListener("click", () => {
+    showNotice("Profil pengguna akan ditambahkan setelah fitur akun dibuat.");
+  });
+
   // Highlight menu sesuai bagian yang sedang dibuka.
   document.querySelectorAll(".nav-item").forEach((link) => {
     link.addEventListener("click", () => {
