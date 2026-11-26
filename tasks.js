@@ -84,12 +84,12 @@
       row.append(taskCell,date,priority,actions);list.append(row);
     });
   }
-  function openEditor(task=null) {
+  function openEditor(task=null, month=null) {
     editingId=task?task.id:null;form.reset();
     $("#manager-dialog-title").textContent=task?"Edit Tugas":"Tambah Tugas";
     $("#manager-save").textContent=task?"Simpan Perubahan":"Simpan Tugas";
     form.elements.title.value=task?task.title:"";
-    form.elements.date.value=task?task.date:todayKey();
+    form.elements.date.value=task?task.date:(month?month+"-01":todayKey());
     form.elements.time.value=task?task.time||"":"09:00";
     form.elements.category.value=task?task.category||"Lainnya":"Pekerjaan";
     form.elements.priority.value=task?task.priority||"medium":"medium";
@@ -99,7 +99,7 @@
     if(!window.confirm('Hapus tugas "'+task.title+'"? Tugas yang dihapus tidak dapat dipulihkan.'))return;
     tasks=tasks.filter(t=>t.id!==task.id);save();render();notice("Tugas berhasil dihapus.");
   }
-  $("#task-add").addEventListener("click",()=>openEditor());
+  $("#task-add").addEventListener("click",()=>openEditor());\n  $("#month-add").addEventListener("click",addMonth);
   $("#manager-close").addEventListener("click",()=>dialog.close());
   $("#manager-cancel").addEventListener("click",()=>dialog.close());
   form.addEventListener("submit",e=>{
