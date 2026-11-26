@@ -8,6 +8,48 @@
   let editingId = null;
   let tasks = readTasks();
 
+  const MONTHS_KEY = "planora-demo-month-columns";
+  let monthColumns = readMonthColumns();
+  function monthKey(date) { return String(date || "").slice(0,7); }
+  function monthTitle(key) { const parts=key.split("-"); if(parts.length!==2)return key; const d=new Date(Number(parts[0]),Number(parts[1])-1,1); return d.toLocaleDateString("id-ID",{month:"long",year:"numeric"}); }
+  function readMonthColumns() {
+    try { const raw=localStorage.getItem(MONTHS_KEY); const saved=raw?JSON.parse(raw):[]; const keys=Array.isArray(saved)?saved.filter(k=>/^\d{4}-\d{2}$/.test(k)):[]; const current=monthKey(todayKey()); return [...new Set([current,...keys])].sort(); }
+    catch(e){return [monthKey(todayKey())];}
+  }
+  function saveMonthColumns(){try{localStorage.setItem(MONTHS_KEY,JSON.stringify(monthColumns));}catch(e){notice("Kolom bulan tidak bisa disimpan di browser ini.");}}
+  function renderMonthBoard() {
+    const board=$("#month-board"); if(!board)return; board.replaceChildren();
+    const keys=[...new Set([...monthColumns,...tasks.map(t=>monthKey(t.date)).filter(k=>/^\d{4}-\d{2}$/.test(k))])].sort();
+    keys.forEach(key=>{
+      const column=document.createElement("section");column.className="month-column";
+      const details=document.createElement("details");details.open=true;
+      const summary=document.createElement("summary");summary.className="month-column-summary";
+      const title=document.createElement("strong");title.textContent=monthTitle(key);
+      const count=document.createElement("span");count.className="month-count";count.textContent=tasks.filter(t=>monthKey(t.date)===key).length;
+      summary.append(title,count);details.append(summary);
+      const cards=document.createElement("div");cards.className="month-cards";
+      tasks.filter(t=>monthKey(t.date)===key).sort((a,b)=>(a.date+(a.time||"")).localeCompare(b.date+(b.time||""))).forEach(t=>{
+        const card=document.createElement("article");card.className="month-task-card"+(t.done?" is-done":"");
+        const check=makeButton(t.done?"✓":"","month-task-check"+(t.done?" checked":""),()=>{t.done=!t.done;save();render();},t.done?"Tandai belum selesai":"Tandai selesai");
+        const open=makeButton(t.title,"month-task-open",()=>openEditor(t),"Buka tugas "+t.title);
+        const meta=document.createElement("small");meta.textContent=(t.time?t.time+" · ":"")+(t.category||"Lainnya");
+        const top=document.createElement("div");top.className="month-task-top";top.append(check,open);
+        card.append(top,meta);cards.append(card);
+      });
+      if(!cards.children.length){const empty=document.createElement("p");empty.className="month-column-empty";empty.textContent="Belum ada tugas di bulan ini.";cards.append(empty);}
+      const add=makeButton("＋ Tambah tugas","month-add-task",()=>openEditor(null,key),"Tambah tugas di "+monthTitle(key));
+      details.append(cards,add);column.append(details);board.append(column);
+    });
+    board.append(makeButton("＋ Tambah Bulan","month-add-card",addMonth,"Tambah kolom bulan"));
+  }
+  function addMonth(){
+    const suggested=new Date();suggested.setMonth(suggested.getMonth()+1);
+    const defaultValue=String(suggested.getFullYear())+"-"+String(suggested.getMonth()+1).padStart(2,"0");
+    const value=window.prompt("Masukkan bulan dengan format YYYY-MM (contoh: 2027-01):",defaultValue);
+    if(value===null)return;const key=value.trim();
+    if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(key)){notice("Format bulan harus YYYY-MM, contoh 2027-01.");return;}
+    if(!monthColumns.includes(key)){monthColumns.push(key);monthColumns.sort();saveMonthColumns();renderMonthBoard();}
+  }
   function todayKey() {
     const d = new Date();
     return [d.getFullYear(), String(d.getMonth()+1).padStart(2,"0"), String(d.getDate()).padStart(2,"0")].join("-");
@@ -66,6 +108,7 @@
     $("#stat-all").textContent=tasks.length;
     $("#stat-open").textContent=tasks.filter(t=>!t.done).length;
     $("#stat-done").textContent=tasks.filter(t=>t.done).length;
+    renderMonthBoard();
     list.replaceChildren();
     const shown=filtered();
     if(!shown.length){const empty=document.createElement("div");empty.className="empty-state task-empty";empty.textContent=tasks.length?"Tidak ada tugas yang cocok dengan pencarian atau filter.":"Belum ada tugas. Tekan Tambah Tugas untuk membuat rencana pertamamu.";list.append(empty);return;}
@@ -99,7 +142,8 @@
     if(!window.confirm('Hapus tugas "'+task.title+'"? Tugas yang dihapus tidak dapat dipulihkan.'))return;
     tasks=tasks.filter(t=>t.id!==task.id);save();render();notice("Tugas berhasil dihapus.");
   }
-  $("#task-add").addEventListener("click",()=>openEditor());\n  $("#month-add").addEventListener("click",addMonth);
+  $("#task-add").addEventListener("click",()=>openEditor());
+  $("#month-add").addEventListener("click",addMonth);\n  $("#month-add").addEventListener("click",addMonth);
   $("#manager-close").addEventListener("click",()=>dialog.close());
   $("#manager-cancel").addEventListener("click",()=>dialog.close());
   form.addEventListener("submit",e=>{
