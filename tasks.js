@@ -24,7 +24,7 @@
     const board=$("#month-board"); if(!board)return; board.replaceChildren();
     const keys=[...new Set([...monthColumns,...tasks.map(t=>monthKey(t.date)).filter(k=>/^\d{4}-\d{2}$/.test(k))])].sort();
     keys.forEach(key=>{
-      const column=document.createElement("section");column.className="month-column";
+      const column=document.createElement("section");column.className="month-column";column.dataset.month=key;
       const details=document.createElement("details");details.open=!collapsedMonths.has(key);
       details.addEventListener("toggle",()=>{if(details.open)collapsedMonths.delete(key);else collapsedMonths.add(key);});
       const summary=document.createElement("summary");summary.className="month-column-summary";
@@ -52,10 +52,12 @@
     if(monthDialog.showModal)monthDialog.showModal();else notice("Gunakan browser terbaru untuk menambah kolom bulan.");
   }
   function addMonth(key){
-    if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(key)){notice("Pilih bulan yang valid.");return;}
-    if(monthColumns.includes(key)){notice("Kolom "+monthTitle(key)+" sudah ada.");return;}
+    if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(key)){notice("Pilih bulan yang valid.");return false;}
+    if(monthColumns.includes(key)){notice("Kolom "+monthTitle(key)+" sudah ada.");return false;}
     monthColumns.push(key);monthColumns.sort();saveMonthColumns();renderMonthBoard();
-    notice("Kolom "+monthTitle(key)+" ditambahkan.");
+    const newColumn=$("#month-board").querySelector('[data-month="'+key+'"]');
+    if(newColumn)newColumn.scrollIntoView({behavior:"smooth",block:"nearest",inline:"nearest"});
+    notice("Kolom "+monthTitle(key)+" ditambahkan.");return true;
   }
   function todayKey() {
     const d = new Date();
@@ -153,7 +155,7 @@
   $("#month-add").addEventListener("click",openMonthDialog);
   $("#month-close").addEventListener("click",()=>monthDialog.close());
   $("#month-cancel").addEventListener("click",()=>monthDialog.close());
-  monthForm.addEventListener("submit",e=>{e.preventDefault();const key=String(monthForm.elements.month.value||"");if(!key)return;addMonth(key);if(monthColumns.includes(key))monthDialog.close();});
+  monthForm.addEventListener("submit",e=>{e.preventDefault();const key=String(monthForm.elements.month.value||"");if(!key)return;if(addMonth(key))monthDialog.close();});
   $("#manager-close").addEventListener("click",()=>dialog.close());
   $("#manager-cancel").addEventListener("click",()=>dialog.close());
   form.addEventListener("submit",e=>{
