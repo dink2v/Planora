@@ -9,7 +9,10 @@
   let tasks = readTasks();
 
   const MONTHS_KEY = "planora-demo-month-columns";
-  let monthColumns = readMonthColumns();\n  const collapsedMonths = new Set();\n  const monthDialog = $("#month-dialog");\n  const monthForm = $("#month-form");
+  let monthColumns = readMonthColumns();
+  const collapsedMonths = new Set();
+  const monthDialog = $("#month-dialog");
+  const monthForm = $("#month-form");
   function monthKey(date) { return String(date || "").slice(0,7); }
   function monthTitle(key) { const parts=key.split("-"); if(parts.length!==2)return key; const d=new Date(Number(parts[0]),Number(parts[1])-1,1); return d.toLocaleDateString("id-ID",{month:"long",year:"numeric"}); }
   function readMonthColumns() {
@@ -22,7 +25,8 @@
     const keys=[...new Set([...monthColumns,...tasks.map(t=>monthKey(t.date)).filter(k=>/^\d{4}-\d{2}$/.test(k))])].sort();
     keys.forEach(key=>{
       const column=document.createElement("section");column.className="month-column";
-      const details=document.createElement("details");details.open=!collapsedMonths.has(key);\n      details.addEventListener("toggle",()=>{if(details.open)collapsedMonths.delete(key);else collapsedMonths.add(key);});
+      const details=document.createElement("details");details.open=!collapsedMonths.has(key);
+      details.addEventListener("toggle",()=>{if(details.open)collapsedMonths.delete(key);else collapsedMonths.add(key);});
       const summary=document.createElement("summary");summary.className="month-column-summary";
       const title=document.createElement("strong");title.textContent=monthTitle(key);
       const count=document.createElement("span");count.className="month-count";count.textContent=tasks.filter(t=>monthKey(t.date)===key).length;
@@ -146,7 +150,10 @@
     tasks=tasks.filter(t=>t.id!==task.id);save();render();notice("Tugas berhasil dihapus.");
   }
   $("#task-add").addEventListener("click",()=>openEditor());
-  $("#month-add").addEventListener("click",openMonthDialog);\n  $("#month-close").addEventListener("click",()=>monthDialog.close());\n  $("#month-cancel").addEventListener("click",()=>monthDialog.close());\n  monthForm.addEventListener("submit",e=>{e.preventDefault();const key=String(monthForm.elements.month.value||"");if(!key)return;addMonth(key);if(monthColumns.includes(key))monthDialog.close();});
+  $("#month-add").addEventListener("click",openMonthDialog);
+  $("#month-close").addEventListener("click",()=>monthDialog.close());
+  $("#month-cancel").addEventListener("click",()=>monthDialog.close());
+  monthForm.addEventListener("submit",e=>{e.preventDefault();const key=String(monthForm.elements.month.value||"");if(!key)return;addMonth(key);if(monthColumns.includes(key))monthDialog.close();});
   $("#manager-close").addEventListener("click",()=>dialog.close());
   $("#manager-cancel").addEventListener("click",()=>dialog.close());
   form.addEventListener("submit",e=>{
