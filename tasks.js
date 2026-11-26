@@ -36,7 +36,7 @@
         const card=document.createElement("article");card.className="month-task-card"+(t.done?" is-done":"");
         const check=makeButton(t.done?"✓":"","month-task-check"+(t.done?" checked":""),()=>{t.done=!t.done;save();render();},t.done?"Tandai belum selesai":"Tandai selesai");
         const open=makeButton(t.title,"month-task-open",()=>openEditor(t),"Buka tugas "+t.title);
-        const meta=document.createElement("small");meta.textContent=(t.time?t.time+" · ":"")+(t.category||"Lainnya");
+        const meta=document.createElement("small");const day=new Date(t.date+"T12:00:00").toLocaleDateString("id-ID",{weekday:"short",day:"numeric"});meta.textContent=day+(t.time?" · "+t.time:"")+" · "+(t.category||"Lainnya");
         const top=document.createElement("div");top.className="month-task-top";top.append(check,open);
         card.append(top,meta);cards.append(card);
       });
